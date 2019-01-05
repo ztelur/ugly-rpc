@@ -7,6 +7,7 @@ package com.remcarpediem.ugly.client.benchmark;
  */
 
 import com.remcarpediem.ugly.client.service.BenchmarkTestService;
+import com.remcarpediem.ugly.common.Order;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -20,9 +21,9 @@ import java.util.concurrent.CyclicBarrier;
  * 
  * @author <a href="mailto:bluedavy@gmail.com">bluedavy</a>
  */
-public class RPCBenchmarkClientRunnable implements ClientRunnable {
+public class FeignBenchmarkClientRunnable implements ClientRunnable {
 
-	private static final Log LOGGER = LogFactory.getLog(RPCBenchmarkClientRunnable.class);
+	private static final Log LOGGER = LogFactory.getLog(FeignBenchmarkClientRunnable.class);
 	
 	private int requestSize;
 
@@ -59,8 +60,8 @@ public class RPCBenchmarkClientRunnable implements ClientRunnable {
 	
 	private int codecType;
 	
-	public RPCBenchmarkClientRunnable(BenchmarkTestService testService, int requestSize, CyclicBarrier barrier,
-									  CountDownLatch latch, long startTime, long endTime, int codecType) {
+	public FeignBenchmarkClientRunnable(BenchmarkTestService testService, int requestSize, CyclicBarrier barrier,
+										CountDownLatch latch, long startTime, long endTime, int codecType) {
 		this.testService = testService;
 		this.codecType = codecType;
 		this.requestSize = requestSize;
@@ -89,59 +90,59 @@ public class RPCBenchmarkClientRunnable implements ClientRunnable {
 		catch (Exception e) {
 			// IGNORE
 		}
-//		runJavaAndHessian();
+		runJavaAndHessian();
 		latch.countDown();
 	}
 	
-//	private void runJavaAndHessian(){
-//		while (running) {
-//			Object requestObject = new RequestObject(requestSize);
-//			long beginTime = System.currentTimeMillis();
-//			if (beginTime >= endTime) {
-//				running = false;
-//				break;
-//			}
-//			try {
-//				Object response = testService.execute(requestObject);
-//				long currentTime = System.currentTimeMillis();
-//				if(beginTime <= startTime){
-//					continue;
-//				}
-//				long consumeTime = currentTime - beginTime;
-//				sumResponseTimeSpread(consumeTime);
-//				int range = Integer.parseInt(String.valueOf(beginTime - startTime))/1000;
-//				if(range >= maxRange){
-//					// IGNORE
-//					continue;
-//				}
-//				if(((ResponseObject)response).getBytes() !=null ){
-//					tps[range] = tps[range] + 1;
-//					responseTimes[range] = responseTimes[range] + consumeTime;
-//				}
-//				else{
-//					LOGGER.error("server return response is null");
-//					errorTPS[range] = errorTPS[range] + 1;
-//					errorResponseTimes[range] = errorResponseTimes[range] + consumeTime;
-//				}
-//			}
-//			catch (Exception e) {
-//				LOGGER.error("testService.execute error",e);
-//				long currentTime = System.currentTimeMillis();
-//				if(beginTime <= startTime){
-//					continue;
-//				}
-//				long consumeTime = currentTime - beginTime;
-//				sumResponseTimeSpread(consumeTime);
-//				int range = Integer.parseInt(String.valueOf(beginTime - startTime))/1000;
-//				if(range >= maxRange){
-//					// IGNORE
-//					continue;
-//				}
-//				errorTPS[range] = errorTPS[range] + 1;
-//				errorResponseTimes[range] = errorResponseTimes[range] + consumeTime;
-//			}
-//		}
-//	}
+	private void runJavaAndHessian(){
+		while (running) {
+			String str = new String("");
+			long beginTime = System.currentTimeMillis();
+			if (beginTime >= endTime) {
+				running = false;
+				break;
+			}
+			try {
+				Order response = testService.createOrder(str);
+				long currentTime = System.currentTimeMillis();
+				if(beginTime <= startTime){
+					continue;
+				}
+				long consumeTime = currentTime - beginTime;
+				sumResponseTimeSpread(consumeTime);
+				int range = Integer.parseInt(String.valueOf(beginTime - startTime))/1000;
+				if(range >= maxRange){
+					// IGNORE
+					continue;
+				}
+				if(response.getContent() !=null ){
+					tps[range] = tps[range] + 1;
+					responseTimes[range] = responseTimes[range] + consumeTime;
+				}
+				else{
+					LOGGER.error("server return response is null");
+					errorTPS[range] = errorTPS[range] + 1;
+					errorResponseTimes[range] = errorResponseTimes[range] + consumeTime;
+				}
+			}
+			catch (Exception e) {
+				LOGGER.error("testService.execute error",e);
+				long currentTime = System.currentTimeMillis();
+				if(beginTime <= startTime){
+					continue;
+				}
+				long consumeTime = currentTime - beginTime;
+				sumResponseTimeSpread(consumeTime);
+				int range = Integer.parseInt(String.valueOf(beginTime - startTime))/1000;
+				if(range >= maxRange){
+					// IGNORE
+					continue;
+				}
+				errorTPS[range] = errorTPS[range] + 1;
+				errorResponseTimes[range] = errorResponseTimes[range] + consumeTime;
+			}
+		}
+	}
 	
 
 	public List<long[]> getResults() {

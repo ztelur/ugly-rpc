@@ -2,6 +2,7 @@ package com.remcarpediem.ugly.server.controller;
 
 import com.google.gson.Gson;
 import com.remcarpediem.ugly.common.CreateOrderForm;
+import com.remcarpediem.ugly.common.Order;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,8 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OrderController {
     @PostMapping("/order")
-    public String createOrder(@RequestBody CreateOrderForm form) {
-        Gson gson = new Gson();
-        return gson.toJson(form);
+    public Order createOrder(@RequestBody CreateOrderForm form) {
+        Order order = new Order();
+        order.setContent(form.getContent() + "123123");
+        return order;
     }
 }

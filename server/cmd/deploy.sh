@@ -1,0 +1,1 @@
+scp ~/ugly-rpc/server/target/server-0.0.1-SNAPSHOT.jar root@119.27.163.171:~
