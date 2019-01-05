@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    consul:
+      host: 127.0.0.1
+      discovery:
+        hostname: client
+        register-health-check: false
+        ip-address: 127.0.0.1
+        prefer-ip-address: true
+  application:
+    name: client
+server:
+  port: 9031
+ribbon:
+  ReadTimeout:  30000
+  ConnectTimeout:  15000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
