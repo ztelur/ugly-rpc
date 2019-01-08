@@ -1,11 +1,8 @@
 package com.remcarpediem.ugly.client.controller;
 
 import com.remcarpediem.ugly.client.benchmark.FeignBenchmarkClient;
-import com.remcarpediem.ugly.client.benchmark.FeignBenchmarkClientRunnable;
 import com.remcarpediem.ugly.client.client.OrderClient;
 import com.remcarpediem.ugly.client.form.TestForm;
-import com.remcarpediem.ugly.common.CreateOrderForm;
-import com.remcarpediem.ugly.common.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +25,7 @@ public class TestController {
 //
         };
         try {
-            feignBenchmarkClient.run(args);
+            feignBenchmarkClient.run(form);
         } catch (Exception e) {
             e.printStackTrace();
         }

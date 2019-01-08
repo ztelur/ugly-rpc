@@ -1,6 +1,5 @@
 package com.remcarpediem.ugly.server.controller;
 
-import com.google.gson.Gson;
 import com.remcarpediem.ugly.common.CreateOrderForm;
 import com.remcarpediem.ugly.common.Order;
 import org.springframework.web.bind.annotation.PostMapping;

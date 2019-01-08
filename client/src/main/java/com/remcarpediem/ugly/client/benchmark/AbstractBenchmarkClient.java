@@ -7,6 +7,8 @@ package com.remcarpediem.ugly.client.benchmark;
  */
 
 
+import com.remcarpediem.ugly.client.form.TestForm;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
@@ -69,7 +71,7 @@ public abstract class AbstractBenchmarkClient {
 	// > 1000
 	private static long above1000sum;
 
-	public void run(String[] args) throws Exception {
+	public void run(TestForm form) throws Exception {
 //		if (args == null || (args.length != 7 && args.length != 8)) {
 //			throw new IllegalArgumentException(
 //					"must give seven or eight args, serverIP serverPort concurrents timeout codectype requestSize runtime(seconds) clientNums");
@@ -91,7 +93,7 @@ public abstract class AbstractBenchmarkClient {
 
 		final String serverIP = "127.0.0.1";
 		final int serverPort = 9030;
-		final int concurrents = 100;
+		final int concurrents = form.getConcurrents();
 		final int timeout = 10;
 		final int codectype = 1;
 		final int requestSize = 100;
